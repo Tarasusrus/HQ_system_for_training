@@ -26,7 +26,7 @@ class Lesson(models.Model):
 class UserLessonView(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
-    viewed_duration = models.IntegerField()  # В секундах.
+    viewed_duration = models.IntegerField(default=0)  # В секундах.
     is_viewed = models.BooleanField(default=False)
     last_viewed_date = models.DateTimeField(auto_now=True)
 

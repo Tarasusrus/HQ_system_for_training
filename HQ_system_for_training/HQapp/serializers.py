@@ -19,7 +19,7 @@ class LessonSerializer(serializers.ModelSerializer):
     included_in_products = SimpleProductSerializer(many=True, read_only=True)
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'video_link', 'duration', 'included_in_products']
+        fields = '__all__'
 
 
 class UserLessonViewSerializer(serializers.ModelSerializer):
@@ -39,3 +39,15 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'owner', 'users_with_access', 'lessons']
+
+
+class ProductStatisticSerializer(serializers.Serializer):
+    """
+    Сериализатор для статистики продукта.
+    """
+
+    product = serializers.CharField()  # Название продукта
+    watched_lessons_count = serializers.IntegerField()  # Количество просмотренных уроков
+    total_viewed_time = serializers.IntegerField()  # Общее время просмотра в секундах
+    students_count = serializers.IntegerField()  # Количество студентов, изучающих продукт
+    acquisition_percentage = serializers.FloatField()  # Процент приобретения продукта

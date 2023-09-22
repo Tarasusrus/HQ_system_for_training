@@ -1,0 +1,14 @@
+<!-- accessible_products.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Accessible Products</h2>
+
+<ul>
+  {% for product in accessible_products %}
+    <li>{{ product.title }}</li>
+  {% empty %}
+    <li>No accessible products available.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

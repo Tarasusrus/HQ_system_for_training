@@ -1,0 +1,11 @@
+<!-- lessons_by_product.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Lessons for {{ product.title }}</h2>
+  <ul>
+    {% for lesson in lessons %}
+      <li>{{ lesson.title }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
