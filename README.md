@@ -35,26 +35,6 @@
    ```
 ## Эндпоинты (доступны в redoc)
 
-### Products
-- `GET /api/products/`: Получение списка всех продуктов.
-- `POST /api/products/`: Создание нового продукта.
-- `GET /api/products/<int:product_id>/`: Получение детальной информации о продукте.
-- `PUT /api/products/<int:product_id>/`: Обновление информации о продукте.
-- `DELETE /api/products/<int:product_id>/`: Удаление продукта.
-
-### Lessons
-- `GET /api/lessons/`: Получение списка всех уроков.
-- `POST /api/lessons/`: Создание нового урока.
-- `GET /api/lessons/<int:lesson_id>/`: Получение детальной информации об уроке.
-- `PUT /api/lessons/<int:lesson_id>/`: Обновление информации об уроке.
-- `DELETE /api/lessons/<int:lesson_id>/`: Удаление урока.
-
-### User Lesson Views
-- `GET /api/user_lesson_views/`: Получение списка всех просмотров уроков пользователем.
-- `POST /api/user_lesson_views/`: Создание нового просмотра урока пользователем.
-- `GET /api/user_lesson_views/<int:view_id>/`: Получение детальной информации о просмотре урока пользователем.
-- `PUT /api/user_lesson_views/<int:view_id>/`: Обновление информации о просмотре урока пользователем.
-- `DELETE /api/user_lesson_views/<int:view_id>/`: Удаление просмотра урока пользователем.
 
 ### Accessible Lessons
 - `GET /api/accessible_lessons/`: Получение списка всех уроков, доступных для пользователя.
