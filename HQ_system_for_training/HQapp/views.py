@@ -9,16 +9,52 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Product, Lesson, UserLessonView
+from .permissions import IsOwnerOrReadOnly
 from .serializers import ProductSerializer, LessonSerializer, UserLessonViewSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
+    """
+    Набор представлений (ViewSet) для продукта.
+
+    Обеспечивает стандартные действия CRUD для модели Product, такие как:
+    - Создание продукта
+    - Просмотр деталей продукта
+    - Обновление продукта
+    - Удаление продукта
+    - Просмотр списка всех продуктов
+
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class LessonViewSet(viewsets.ModelViewSet):
+    """
+        Управление уроками через API.
+
+        Предоставляет CRUD операции для уроков, позволяя просматривать, создавать, редактировать и удалять уроки через API.
+        Аутентификация пользователя требуется для всех операций.
+
+        Методы:
+        - GET: Возвращает список всех уроков или детали одного урока.
+        - POST: Создает новый урок.
+        - PUT, PATCH: Обновляет существующий урок.
+        - DELETE: Удаляет урок.
+
+        Поля запроса и ответа:
+        - id: Идентификатор урока.
+        - title: Название урока.
+        - video_link: Ссылка на видео урока.
+        - duration: Длительность урока в секундах.
+        - ... (и другие поля, зависящие от `LessonSerializer`).
+
+        Ошибки:
+        - 401 Unauthorized: Пользователь не аутентифицирован.
+        - 403 Forbidden: Пользователь не имеет права на выполнение операции.
+        - 404 Not Found: Урок не найден.
+        """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -146,40 +182,6 @@ class AccessibleProductsListView(LoginRequiredMixin, ListView):
 
         # Возвращаем продукты, к которым у пользователя есть доступ
         return Product.objects.filter(users_with_access=current_user)
-
-
-class LessonsByProductListView(ListAPIView):
-    """
-    Класс для представления списка уроков входящих в конкретный продукт.
-    Предполагается, что пользователь имеет доступ к продукту.
-
-    Attributes:
-    - template_name (str): Путь к шаблону, который будет использован для отображения уроков.
-    - context_object_name (str): Название контекстного объекта, содержащего уроки в шаблоне.
-    - serializer_class: Класс сериализатора для преобразования объектов урока в JSON.
-    """
-
-    template_name = 'lessons_by_product.html'
-    context_object_name = 'lessons'
-    serializer_class = LessonSerializer
-
-    def get_queryset(self):
-        """
-        Получает и возвращает QuerySet уроков для продукта, доступного текущему пользователю.
-
-        Returns:
-        QuerySet: Список уроков, входящих в продукт.
-        """
-
-        # Получаем текущего пользователя и идентификатор продукта из параметров запроса
-        user = self.request.user
-        product_id = self.kwargs.get('product_id')
-
-        # Получаем продукт, к которому у текущего пользователя есть доступ, или возвращаем 404
-        product = get_object_or_404(Product, id=product_id, users_with_access=user)
-
-        # Возвращаем все уроки, входящие в продукт
-        return product.lessons.all()
 
 
 class ProductStatisticView(APIView):
