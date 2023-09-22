@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.http import Http404
 from django.views.generic import ListView
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework.generics import ListAPIView, get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -155,19 +156,12 @@ class LessonsByProductView(APIView):
         return Response(response_data)  # Отправляем ответ
 
 
-class AccessibleProductsListView(LoginRequiredMixin, ListView):
+class AccessibleProductsListView(generics.ListAPIView):
     """
-    Класс для представления списка продуктов, доступных текущему пользователю.
-
-    Attributes:
-    - template_name (str): Путь к шаблону, который будет использован для отображения продуктов.
-    - context_object_name (str): Название контекстного объекта, содержащего продукты в шаблоне.
-    - login_url (str): URL страницы входа, на которую будет перенаправлен неавторизованный пользователь.
+    Класс для представления списка продуктов, доступных текущему пользователю в формате JSON.
     """
-
-    template_name = 'accessible_products.html'
-    context_object_name = 'accessible_products'
-    login_url = '/path_to_your_login_page/'  # Замените на путь к вашей странице входа
+    serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """
@@ -176,7 +170,6 @@ class AccessibleProductsListView(LoginRequiredMixin, ListView):
         Returns:
         QuerySet: Список продуктов, доступных текущему пользователю.
         """
-
         # Получаем текущего пользователя
         current_user = self.request.user
 
